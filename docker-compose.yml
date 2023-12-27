@@ -1,0 +1,110 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:${POSTGRES_VERSION:-15.4}
+    restart: unless-stopped
+    hostname: db
+    container_name: db
+    logging:
+      driver: json-file
+      options:
+        max-size: 100mb
+        max-file: 10
+    expose:
+      - 5432
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mirror_template:
+    build:
+      context: ./mirror_template
+      args:
+        - VITE_PUBLIC_URL=${MIRROR_TEMPLATE_PUBLIC_URL:-/}
+    hostname: mirror_template
+    container_name: mirror_template
+    logging:
+      driver: json-file
+      options:
+        max-size: 100mb
+        max-file: 10
+    environment:
+      - MIRROR_TEMPLATE_PUBLIC_URL
+    expose:
+      - 3000
+    depends_on:
+      - mirror_backoffice
+
+  mirror_backoffice:
+    build:
+      context: ./mirror_backoffice
+    hostname: mirror_backoffice
+    container_name: mirror_backoffice
+    logging:
+      driver: json-file
+      options:
+        max-size: 100mb
+        max-file: 10
+    environment:
+      MIRROR_BACKOFFICE_PORT: ${MIRROR_BACKOFFICE_PORT:-3003}
+      DB_HOST: ${DB_HOST:-db}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_PASS: ${DB_PASS:-postgres}
+      DB_USER: ${DB_USER:-postgres}
+      DB_NAME: ${DB_NAME:-postgres}
+      JWT_SECRET: ${JWT_SECRET:-secret}
+      SESSION_SECRET: ${SESSION_SECRET:-secret}
+      COINBASE_SECRET: ${COINBASE_SECRET:-coinbase}
+      MIRROR_BACKOFFICE_ALLOWED_CORS: ${MIRROR_BACKOFFICE_ALLOWED_CORS:-localhost}
+    expose:
+      - ${MIRROR_BACKOFFICE_PORT:-3003}
+    depends_on:
+      - db
+
+  mirror_dashboard:
+    build:
+      context: ./mirror_dashboard
+      args:
+        - REACT_APP_PUBLIC_URL=${MIRROR_DASHBOARD_PUBLIC_URL:-/}
+        - REACT_APP_BACKEND_URL=${MIRROR_DASHBORD_BACKEND_URL:-/}
+    hostname: mirror_dashboard
+    container_name: mirror_dashboard
+    logging:
+      driver: json-file
+      options:
+        max-size: 100mb
+        max-file: 10
+    environment:
+      - MIRROR_DASHBORD_BACKEND_URL
+      - MIRROR_DASHBOARD_PUBLIC_URL
+    expose:
+      - 3000
+    depends_on:
+      - mirror_backoffice
+
+  mirror_proxy:
+    build:
+      context: ./mirror_proxy
+    hostname: mirror_proxy
+    container_name: mirror_proxy
+    logging:
+      driver: json-file
+      options:
+        max-size: 100mb
+        max-file: 10
+    environment:
+      - MIRROR_TEMPLATE_PUBLIC_URL
+    expose:
+      - 80
+    ports:
+      - 80:80
+    depends_on:
+      - mirror_backoffice
+      - mirror_dashboard
+      - mirror_template
+
+volumes:
+  postgres_data: { driver: local }

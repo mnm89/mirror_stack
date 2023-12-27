@@ -1,4 +1,8 @@
 mirror_keys
+mirror_template
+mirror_installer
+mirror_dashboard
+mirror_backoffice
 node_modules
 .DS_Store
 .env

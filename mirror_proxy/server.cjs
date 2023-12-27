@@ -11,10 +11,23 @@ const port = process.env.MIRROR_SERVER_PORT
 
 const router = express.Router();
 router.get("/health", function (req, res) {
-  res.send(
-    `Proxy server running ${fs
-      .readFileSync(path.resolve("version"))
-      .toString("utf-8")} .... OK`
+  const getVersion = (filename) => {
+    return fs.existsSync(path.resolve(filename))
+      ? fs.readFileSync(path.resolve(filename)).toString("utf-8")
+      : " No version defined";
+  };
+  const proxy_version = getVersion("version");
+  const backoffice_version = getVersion("mirror_backoffice_version");
+  const template_version = getVersion("mirror_template_version");
+  const dashboard_version = getVersion("mirror_dashboard_version");
+
+  res.status(200).send(
+    `Proxy server running OK <br>
+     Mirror proxy version: ${proxy_version}<br>
+     Mirror backoffice version: ${backoffice_version}<br>
+     Mirror dashboard version: ${dashboard_version}<br>
+     Mirror template version: ${template_version}<br>
+    `
   );
 });
 

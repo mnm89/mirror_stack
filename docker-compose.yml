@@ -97,6 +97,10 @@ services:
         max-file: 10
     environment:
       - MIRROR_TEMPLATE_PUBLIC_URL
+    volumes:
+      - ./mirro_proxy/mirror_backoffice_version:/usr/src/app/mirror_backoffice_version
+      - ./mirro_proxy/mirror_template_version:/usr/src/app/mirror_template_version
+      - ./mirro_proxy/mirror_dashboard_version:/usr/src/app/mirror_dashboard_version
     expose:
       - 80
     ports:

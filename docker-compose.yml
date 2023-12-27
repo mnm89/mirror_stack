@@ -98,17 +98,17 @@ services:
     environment:
       - MIRROR_TEMPLATE_PUBLIC_URL
     volumes:
-      - ./mirro_proxy/mirror_backoffice_version:/usr/src/app/mirror_backoffice_version
-      - ./mirro_proxy/mirror_template_version:/usr/src/app/mirror_template_version
-      - ./mirro_proxy/mirror_dashboard_version:/usr/src/app/mirror_dashboard_version
+      - ./mirror_proxy/mirror_backoffice_version:/usr/src/app/mirror_backoffice_version:ro
+      - ./mirror_proxy/mirror_template_version:/usr/src/app/mirror_template_version:ro
+      - ./mirror_proxy/mirror_dashboard_version:/usr/src/app/mirror_dashboard_version:ro
     expose:
       - 80
     ports:
       - 80:80
-    depends_on:
-      - mirror_backoffice
-      - mirror_dashboard
-      - mirror_template
+    #depends_on:
+    # - mirror_backoffice
+    # - mirror_dashboard
+    # - mirror_template
 
 volumes:
   postgres_data: { driver: local }

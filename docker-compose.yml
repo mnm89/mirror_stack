@@ -105,10 +105,10 @@ services:
       - 80
     ports:
       - 80:80
-    #depends_on:
-    # - mirror_backoffice
-    # - mirror_dashboard
-    # - mirror_template
+    depends_on:
+      - mirror_backoffice
+      - mirror_dashboard
+      - mirror_template
 
 volumes:
   postgres_data: { driver: local }

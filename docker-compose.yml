@@ -101,10 +101,12 @@ services:
       - ./mirror_proxy/mirror_backoffice_version:/usr/src/app/mirror_backoffice_version:ro
       - ./mirror_proxy/mirror_template_version:/usr/src/app/mirror_template_version:ro
       - ./mirror_proxy/mirror_dashboard_version:/usr/src/app/mirror_dashboard_version:ro
+      - /etc/letsencrypt/live/mirrorpn.ddns.net/fullchain.pem:/usr/src/app/cert.pem:ro
+      - /etc/letsencrypt/live/mirrorpn.ddns.net/privkey.pem:/usr/src/app/privKey.pem:ro
     expose:
-      - 80
+      - 443
     ports:
-      - 80:80
+      - 443:443
     depends_on:
       - mirror_backoffice
       - mirror_dashboard

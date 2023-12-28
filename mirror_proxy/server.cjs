@@ -3,11 +3,16 @@ const morgan = require("morgan");
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const path = require("path");
 const fs = require("fs");
+const https = require("https");
 
 const app = express();
-const port = process.env.MIRROR_SERVER_PORT
-  ? Number.parseInt(process.env.MIRROR_SERVER_PORT)
-  : 80;
+const server = https.createServer(
+  {
+    cert: fs.readFileSync("cert.pem"),
+    key: fs.readFileSync("privKey.pem"),
+  },
+  app
+);
 
 const router = express.Router();
 router.get("/health", function (req, res) {
@@ -107,6 +112,7 @@ app.use(
   )
 );
 app.use("/", router);
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+
+server.listen(443, () => {
+  console.log(`Example app listening on port ${443}`);
 });

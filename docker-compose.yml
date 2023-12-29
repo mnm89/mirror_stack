@@ -61,6 +61,9 @@ services:
       MIRROR_BACKOFFICE_ALLOWED_CORS: ${MIRROR_BACKOFFICE_ALLOWED_CORS:-localhost}
       COINPAYMENTS_API_KEY: ${COINPAYMENTS_API_KEY:-coinbasepayments_api_key}
       COINPAYMENTS_API_SECRET: ${COINPAYMENTS_API_SECRET:-coinbasepayments_api_secret}
+      COINPAYMENTS_API_URL: ${COINPAYMENTS_API_URL:-https://www.coinpayments.net/api.php}
+      API_VERSION: ${API_VERSION:-1}
+      IPN_SECRET: ${IPN_SECRET:-ipn_secret}
     expose:
       - ${MIRROR_BACKOFFICE_PORT:-3003}
     depends_on:

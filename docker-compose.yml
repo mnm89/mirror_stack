@@ -59,6 +59,8 @@ services:
       SESSION_SECRET: ${SESSION_SECRET:-secret}
       COINBASE_SECRET: ${COINBASE_SECRET:-coinbase}
       MIRROR_BACKOFFICE_ALLOWED_CORS: ${MIRROR_BACKOFFICE_ALLOWED_CORS:-localhost}
+      COINPAYMENTS_API_KEY: ${COINPAYMENTS_API_KEY:-coinbasepayments_api_key}
+      COINPAYMENTS_API_SECRET: ${COINPAYMENTS_API_SECRET:-coinbasepayments_api_secret}
     expose:
       - ${MIRROR_BACKOFFICE_PORT:-3003}
     depends_on:

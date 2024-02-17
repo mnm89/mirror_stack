@@ -64,7 +64,7 @@ services:
       COINPAYMENTS_API_URL: ${COINPAYMENTS_API_URL:-https://www.coinpayments.net/api.php}
       API_VERSION: ${API_VERSION:-1}
       IPN_SECRET: ${IPN_SECRET:-ipn_secret}
-      INSTALLER_URL: ${INSTALLER_URL:-https://95.179.211.4}
+      INSTALLER_URL: ${INSTALLER_URL:-https://95.179.211.49}
       # remove this after fixing https with a real domain
       NODE_TLS_REJECT_UNAUTHORIZED: 0
     expose:

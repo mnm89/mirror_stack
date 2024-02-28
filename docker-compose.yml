@@ -37,6 +37,7 @@ services:
       - 3000
     depends_on:
       - mirror_backoffice
+    restart: unless-stopped
 
   mirror_backoffice:
     build:
@@ -71,6 +72,7 @@ services:
       - ${MIRROR_BACKOFFICE_PORT:-3003}
     depends_on:
       - db
+    restart: unless-stopped
 
   mirror_dashboard:
     build:
@@ -92,6 +94,7 @@ services:
       - 3000
     depends_on:
       - mirror_backoffice
+    restart: unless-stopped
 
   mirror_proxy:
     build:
@@ -113,8 +116,11 @@ services:
       - /etc/letsencrypt/live/mirrorpn.ddns.net/privkey.pem:/usr/src/app/privKey.pem:ro
     expose:
       - 443
+      - 80
     ports:
       - 443:443
+      - 80:80
+    restart: unless-stopped
     depends_on:
       - mirror_backoffice
       - mirror_dashboard
